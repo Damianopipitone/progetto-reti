@@ -16,9 +16,9 @@ app = Flask("__server_manager__")
 
 def end_point_GET(devname):
     with open(LOG_FILE, 'r', newline='') as f:
-        dict = csv.DictReader(f)
+        dizionario = csv.DictReader(f)
         results = []
-        for row in dict:
+        for row in dizionario:
             if row['id_device'] == devname:
                 results.append(row)
 
@@ -31,7 +31,7 @@ def prelievo_dati():
     print(data)
     with open(LOG_FILE, 'a', newline='') as f:
         writer = csv.writer(f)
-        writer.writerow([datetime.now().isoformat(), data['id_device'], data['sensor_type'], data['flow'], data['volume']])
+        writer.writerow([data['timestamp'], data['id_device'], data['sensor_type'], data['flow'], data['volume']])
 
     return jsonify({'status': 'ok'})
 

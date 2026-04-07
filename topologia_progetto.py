@@ -151,5 +151,23 @@ if __name__ == '__main__':
     net.get('c0').cmd('curl -X POST -d \'{"destination": "10.8.1.0/24", "gateway": "170.0.0.2"}\' http://localhost:8080/router/0000000000000003') # Spedisce a R4 (.2)
     net.get('c0').cmd('curl -X POST -d \'{"destination": "0.0.0.0/0", "gateway": "200.0.0.1"}\' http://localhost:8080/router/0000000000000003') # Spedisce a R1 (.1)
 
+    # Consentire il traffico di Eng_server esclusivamente verso il dipartimento di ingegneria
+    net.get('eng_srv').cmd('iptables -A OUTPUT -d 12.0.0.0/24 -j ACCEPT')
+    
+    # Negare il traffico da Eng_server verso gli altri dipartimenti
+    net.get('eng_srv').cmd('iptables -A OUTPUT -d 11.0.0.0/24 -j DROP') # Architettura
+    net.get('eng_srv').cmd('iptables -A OUTPUT -d 10.8.1.0/24 -j DROP') # Lettere
+
+    # Avvio di Flask
+    net.get('mgr_svr').cmd('python3 manager_server.py &')
+
+    # sensori demoni 
+    net.get('s1_arch').cmd('python3 sensor_daemon.py Arch_sens1 &')
+    net.get('s2_arch').cmd('python3 sensor_daemon.py Arch_sens2 &')
+    net.get('s1_eng').cmd('python3 sensor_daemon.py Eng_sens1 &')
+    net.get('s2_eng').cmd('python3 sensor_daemon.py Eng_sens2 &')
+    net.get('s1_lit').cmd('python3 sensor_daemon.py Lit_sens1 &')
+    net.get('s2_lit').cmd('python3 sensor_daemon.py Lit_sens2 &')
+
     CLI(net)
     net.stop()

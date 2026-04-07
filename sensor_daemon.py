@@ -8,12 +8,13 @@ def data_to_mgrSvr():
 
     id_sensor = sys.argv[1]
     with open(FILE, 'r', newline='') as f:
-        dict = csv.DictReader(f)
-        for row in dict:
+        dizionario = csv.DictReader(f)
+        for row in dizionario:
             if row['id_sensor'] == id_sensor:
                 requests.post('http://192.168.1.1:5000/sensor/water_network', 
-                              json={'id_device': row['id_sensor'], 
-                                    'sensor_type': 'water', 
+                              json={'timestamp': row['timestamp'],
+                                    'id_device': row['id_sensor'], 
+                                    'sensor_type': 'humidity', 
                                     'flow': row['flow'], 
                                     'volume': row['volume']})
                 time.sleep(1)
