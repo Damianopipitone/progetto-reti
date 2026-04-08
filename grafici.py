@@ -18,14 +18,22 @@ data['timestamp'] = pd.to_datetime(data['timestamp'], format='mixed')
 # Creiamo una "tela" con due grafici (uno sopra, uno sotto)
 fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 10))
 
+print('Elenco sensori disponibili: ' \
+'      1. Arch_sens1' \
+'      2. Arch_sens2' \
+'      3. Eng_sens1' \
+'      4. Eng_sens2' \
+'      5. Lit_sens1' \
+'      6. Lit_sens2')
+sensore_scelto = input('Inserisci il nome del sensore...')
+grandezza = input('Inserisci la grandezza (flow/volume)...')
 
-sensore_scelto = 'Lit_sens1'
 dati_sensore = data[data['id_device'] == sensore_scelto]
 
-ax1.plot(dati_sensore['timestamp'], dati_sensore['volume'], marker='o', color='b', linestyle='-')
-ax1.set_title(f'Andamento Volume nel tempo per {sensore_scelto}')
+ax1.plot(dati_sensore['timestamp'], dati_sensore[grandezza], marker='o', color='b', linestyle='-')
+ax1.set_title(f'Andamento {grandezza.capitalize()} nel tempo per {sensore_scelto}')
 ax1.set_xlabel('Orario')
-ax1.set_ylabel('Volume (Litri)')
+ax1.set_ylabel(f'{grandezza.capitalize()} (Litri)')
 ax1.grid(True)
 
 # Andamento temporale per un dipartimento
